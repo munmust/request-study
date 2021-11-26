@@ -240,6 +240,7 @@ export default function fetchMiddleware(ctx, next) {
 - 内核中间件 ：request.use(fn, { core: true }) 内核中间件， 方便开发者拓展请求内核；
 
 
+
 ## 取消请求
 
 ### 核心
