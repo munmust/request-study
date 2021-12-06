@@ -13,8 +13,11 @@ var combineURLs = require('../helpers/combineURLs');
  * @returns {string} The combined full path
  */
 module.exports = function buildFullPath(baseURL, requestedURL) {
+  // 存在baseUrl且不是绝对路径
   if (baseURL && !isAbsoluteURL(requestedURL)) {
+    // 返回拼接的完全路径
     return combineURLs(baseURL, requestedURL);
   }
+  // 绝对路径或没有baseUrl配置，直接返回
   return requestedURL;
 };

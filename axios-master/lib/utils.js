@@ -12,6 +12,11 @@ var toString = Object.prototype.toString;
  * @param {Object} val The value to test
  * @returns {boolean} True if value is an Array, otherwise false
  */
+/**
+ * 判断是否为数组
+ * @param {Object} val 需要验证的值
+ * @returns true or false
+ */
 function isArray(val) {
   return toString.call(val) === '[object Array]';
 }
@@ -21,6 +26,11 @@ function isArray(val) {
  *
  * @param {Object} val The value to test
  * @returns {boolean} True if the value is undefined, otherwise false
+ */
+/**
+ * 判断值是否为undefined
+ * @param {Object} val 验证的值
+ * @returns true or false
  */
 function isUndefined(val) {
   return typeof val === 'undefined';
@@ -32,9 +42,20 @@ function isUndefined(val) {
  * @param {Object} val The value to test
  * @returns {boolean} True if value is a Buffer, otherwise false
  */
+/**
+ * Buffer node处理二进制数据的接口，Node原生提供的全局对象
+ * 它是一个构造函数，生成的实例代表了V8引擎分配的一段内存，是一个类似数组的对象，成员都为0到255的整数值，即一个8位的字节
+ */
 function isBuffer(val) {
-  return val !== null && !isUndefined(val) && val.constructor !== null && !isUndefined(val.constructor)
-    && typeof val.constructor.isBuffer === 'function' && val.constructor.isBuffer(val);
+  // 值不为空和undefined 并且含有constructor，并且constructor中含有isBuffer是函数。并且调用isBuffer判断
+  return (
+    val !== null &&
+    !isUndefined(val) &&
+    val.constructor !== null &&
+    !isUndefined(val.constructor) &&
+    typeof val.constructor.isBuffer === 'function' &&
+    val.constructor.isBuffer(val)
+  );
 }
 
 /**
@@ -53,8 +74,9 @@ function isArrayBuffer(val) {
  * @param {Object} val The value to test
  * @returns {boolean} True if value is an FormData, otherwise false
  */
+// 确认值是否是formData
 function isFormData(val) {
-  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+  return typeof FormData !== 'undefined' && val instanceof FormData;
 }
 
 /**
@@ -63,12 +85,13 @@ function isFormData(val) {
  * @param {Object} val The value to test
  * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
  */
+// TODO 不理解
 function isArrayBufferView(val) {
   var result;
-  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+  if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView) {
     result = ArrayBuffer.isView(val);
   } else {
-    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+    result = val && val.buffer && val.buffer instanceof ArrayBuffer;
   }
   return result;
 }
@@ -79,6 +102,7 @@ function isArrayBufferView(val) {
  * @param {Object} val The value to test
  * @returns {boolean} True if value is a String, otherwise false
  */
+// 判断是否为字符串
 function isString(val) {
   return typeof val === 'string';
 }
@@ -89,6 +113,7 @@ function isString(val) {
  * @param {Object} val The value to test
  * @returns {boolean} True if value is a Number, otherwise false
  */
+// 判断是否为数字
 function isNumber(val) {
   return typeof val === 'number';
 }
@@ -99,6 +124,7 @@ function isNumber(val) {
  * @param {Object} val The value to test
  * @returns {boolean} True if value is an Object, otherwise false
  */
+// 判断是否为对象
 function isObject(val) {
   return val !== null && typeof val === 'object';
 }
@@ -109,6 +135,7 @@ function isObject(val) {
  * @param {Object} val The value to test
  * @return {boolean} True if value is a plain Object, otherwise false
  */
+// p判断是否为普通的对象
 function isPlainObject(val) {
   if (toString.call(val) !== '[object Object]') {
     return false;
@@ -184,6 +211,7 @@ function isURLSearchParams(val) {
  * @param {String} str The String to trim
  * @returns {String} The String freed of excess whitespace
  */
+// 去除头尾空格
 function trim(str) {
   return str.trim ? str.trim() : str.replace(/^\s+|\s+$/g, '');
 }
@@ -203,16 +231,15 @@ function trim(str) {
  * nativescript
  *  navigator.product -> 'NativeScript' or 'NS'
  */
+// 判断是否为浏览器环境
 function isStandardBrowserEnv() {
-  if (typeof navigator !== 'undefined' && (navigator.product === 'ReactNative' ||
-                                           navigator.product === 'NativeScript' ||
-                                           navigator.product === 'NS')) {
+  if (
+    typeof navigator !== 'undefined' &&
+    (navigator.product === 'ReactNative' || navigator.product === 'NativeScript' || navigator.product === 'NS')
+  ) {
     return false;
   }
-  return (
-    typeof window !== 'undefined' &&
-    typeof document !== 'undefined'
-  );
+  return typeof window !== 'undefined' && typeof document !== 'undefined';
 }
 
 /**
@@ -227,6 +254,12 @@ function isStandardBrowserEnv() {
  * @param {Object|Array} obj The object to iterate
  * @param {Function} fn The callback to invoke for each item
  */
+/**
+ * 对象遍历--数组、对象
+ * @param {*} obj 便利的对象
+ * @param {*} fn 便利的方法
+ * @returns 
+ */
 function forEach(obj, fn) {
   // Don't bother if no value provided
   if (obj === null || typeof obj === 'undefined') {
@@ -239,6 +272,7 @@ function forEach(obj, fn) {
     obj = [obj];
   }
 
+  // 不是数组就是对象，执行遍历方法
   if (isArray(obj)) {
     // Iterate over array values
     for (var i = 0, l = obj.length; i < l; i++) {
@@ -317,7 +351,7 @@ function extend(a, b, thisArg) {
  * @return {string} content value without BOM
  */
 function stripBOM(content) {
-  if (content.charCodeAt(0) === 0xFEFF) {
+  if (content.charCodeAt(0) === 0xfeff) {
     content = content.slice(1);
   }
   return content;
@@ -345,5 +379,5 @@ module.exports = {
   merge: merge,
   extend: extend,
   trim: trim,
-  stripBOM: stripBOM
+  stripBOM: stripBOM,
 };

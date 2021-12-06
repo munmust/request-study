@@ -5,10 +5,23 @@ var utils = require('./../utils');
 // Headers whose duplicates are ignored by node
 // c.f. https://nodejs.org/api/http.html#http_message_headers
 var ignoreDuplicateOf = [
-  'age', 'authorization', 'content-length', 'content-type', 'etag',
-  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
-  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
-  'referer', 'retry-after', 'user-agent'
+  'age',
+  'authorization',
+  'content-length',
+  'content-type',
+  'etag',
+  'expires',
+  'from',
+  'host',
+  'if-modified-since',
+  'if-unmodified-since',
+  'last-modified',
+  'location',
+  'max-forwards',
+  'proxy-authorization',
+  'referer',
+  'retry-after',
+  'user-agent',
 ];
 
 /**
@@ -30,14 +43,19 @@ module.exports = function parseHeaders(headers) {
   var val;
   var i;
 
-  if (!headers) { return parsed; }
+  if (!headers) {
+    return parsed;
+  }
 
+  // 通过分行符得到各个header的字符
   utils.forEach(headers.split('\n'), function parser(line) {
     i = line.indexOf(':');
+    // 得到key和value
     key = utils.trim(line.substr(0, i)).toLowerCase();
     val = utils.trim(line.substr(i + 1));
 
     if (key) {
+      // 已经存在或是忽略的header直接跳过
       if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
         return;
       }
