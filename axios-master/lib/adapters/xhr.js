@@ -35,7 +35,7 @@ module.exports = function xhrAdapter(config) {
       delete requestHeaders['Content-Type']; // Let the browser set it
     }
 
-    // 得到XMLHttpRequest实例
+    // 创建XMLHttpRequest实例
     var request = new XMLHttpRequest();
 
     // HTTP basic authentication
